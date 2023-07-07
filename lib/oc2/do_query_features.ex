@@ -1,4 +1,6 @@
 defmodule Openc2.Oc2.DoQueryFeatures do
+  alias Openc2.Oc2.Command
+
   @this_version "0.9.5"
   @this_profile ["sbom", "blinky", "slpf"]
   @pairsout %{
@@ -31,7 +33,7 @@ defmodule Openc2.Oc2.DoQueryFeatures do
      (or error)
   """
   def return_features(
-        %Oc2.Command{action: "query", target: "features", target_specifier: ts} = command
+        %Command{action: "query", target: "features", target_specifier: ts} = command
       )
       when is_list(ts) do
     get_features(command, ts)
@@ -39,12 +41,12 @@ defmodule Openc2.Oc2.DoQueryFeatures do
 
   def return_features(command) do
     Logger.debug("return_features #{inspect(command)}")
-    Oc2.Command.return_error("invalid target specifier")
+    Command.return_error("invalid target specifier")
   end
 
   defp get_features(command, []) do
     ## empty feature list, return ok
-    %Oc2.Command{command | response: %{status: 200}}
+    %Command{command | response: %{status: 200}}
   end
 
   defp get_features(command, features)
@@ -55,13 +57,13 @@ defmodule Openc2.Oc2.DoQueryFeatures do
     case iterate_features(output, features) do
       {:ok, result} ->
         ## respond with answer
-        %Oc2.Command{command | response: result}
+        %Command{command | response: result}
 
       _ ->
         ## oops occurred on format
         Logger.debug("get_features error")
         error_msg = "invalid features"
-        Oc2.Command.return_error(error_msg)
+        Command.return_error(error_msg)
     end
   end
 

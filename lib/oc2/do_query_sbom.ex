@@ -1,6 +1,8 @@
 defmodule Openc2.Oc2.DoQuerySbom do
   require Logger
 
+  alias Openc2.Oc2.Command
+
   @doc """
   return_sbom returns sbom
      (or error)
@@ -16,10 +18,10 @@ defmodule Openc2.Oc2.DoQuerySbom do
 
     case ok? do
       false ->
-        Oc2.Command.return_error(answer)
+        Command.return_error(answer)
 
       true ->
-        %Oc2.Command{command | response: cyclonedx()}
+        %Command{command | response: cyclonedx()}
     end
   end
 

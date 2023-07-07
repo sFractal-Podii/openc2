@@ -28,6 +28,9 @@ defmodule Openc2.Oc2.Command do
 
   require Logger
 
+  alias Openc2.Oc2.CheckOc2
+  alias Openc2.Oc2.DoOc2
+
   @doc """
   new intializes the command struct
   """
@@ -36,23 +39,23 @@ defmodule Openc2.Oc2.Command do
     # convert json text into elixir map
     |> Jason.decode()
     # initialize struct
-    |> Oc2.CheckOc2.new()
+    |> CheckOc2.new()
     # validate oc2
-    |> Oc2.CheckOc2.check_cmd()
+    |> CheckOc2.check_cmd()
   end
 
   @doc """
   do_cmd executes the action
   matching on action/target
   """
-  def do_cmd(%Oc2.Command{error?: true} = command) do
+  def do_cmd(%__MODULE__{error?: true} = command) do
     ## something went wrong upstream, pass along
     command
   end
 
   def do_cmd(command) do
     command
-    |> Oc2.DoOc2.do_cmd()
+    |> DoOc2.do_cmd()
   end
 
   @doc """
@@ -60,6 +63,6 @@ defmodule Openc2.Oc2.Command do
   """
   def return_error(error_msg) do
     Logger.debug(error_msg)
-    %Oc2.Command{error?: true, error_msg: error_msg}
+    %__MODULE__{error?: true, error_msg: error_msg}
   end
 end

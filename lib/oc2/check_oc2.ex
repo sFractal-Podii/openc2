@@ -6,11 +6,14 @@ defmodule Openc2.Oc2.CheckOc2 do
   - chk_cmd - validate command
   """
 
+  alias Openc2.Oc2.Command
+
   @actions ["query", "set", "cancel", "allow", "deny"]
   @targets [
     "sbom",
     "features",
     "hello_world",
+    "x-sfractal-blinky:hello_world",
     "led",
     "ipv4_net",
     "ipv6_net"
@@ -21,6 +24,7 @@ defmodule Openc2.Oc2.CheckOc2 do
     {"query", "features"},
     {"query", "sbom"},
     {"query", "hello_world"},
+    {"query", "x-sfractal-blinky:hello_world"},
     {"set", "led"},
     {"allow", "ipv4_net"},
     {"allow", "ipv6_net"},
@@ -34,18 +38,18 @@ defmodule Openc2.Oc2.CheckOc2 do
   new intializes the command struct
   """
   def new({:ok, cmd}) do
-    %Oc2.Command{cmd: cmd, error?: false}
+    %Command{cmd: cmd, error?: false}
   end
 
   def new({_status, error_msg}) do
-    %Oc2.Command{error?: true, error_msg: error_msg}
+    %Command{error?: true, error_msg: error_msg}
   end
 
   @doc """
   check_cmd checks the decoded json (now elixir terms) for
   compliance with the openc2 specification
   """
-  def check_cmd(%Oc2.Command{error?: true} = command) do
+  def check_cmd(%Command{error?: true} = command) do
     ## upstream error, pass it on
     command
   end
@@ -63,7 +67,7 @@ defmodule Openc2.Oc2.CheckOc2 do
     |> log_cmd
   end
 
-  defp check_top(%Oc2.Command{error?: true} = command) do
+  defp check_top(%Command{error?: true} = command) do
     ## upstream error, pass it on
     command
   end
@@ -74,15 +78,15 @@ defmodule Openc2.Oc2.CheckOc2 do
     cond do
       ## is action missing?
       "action" not in tops ->
-        Oc2.Command.return_error("no action in command")
+        Command.return_error("no action in command")
 
       ## is target missing?
       "target" not in tops ->
-        Oc2.Command.return_error("no target in command")
+        Command.return_error("no target in command")
 
       ## extra top level fields
       0 != length(tops -- @top_level) ->
-        Oc2.Command.return_error("extra top level fields in command")
+        Command.return_error("extra top level fields in command")
 
       true ->
         ## passed checks
@@ -92,7 +96,7 @@ defmodule Openc2.Oc2.CheckOc2 do
     end
   end
 
-  defp check_action(%Oc2.Command{error?: true} = command) do
+  defp check_action(%Command{error?: true} = command) do
     ## upstream error, pass it on
     command
   end
@@ -103,14 +107,14 @@ defmodule Openc2.Oc2.CheckOc2 do
 
     if action in @actions do
       # return struct with action updated
-      %Oc2.Command{command | action: action}
+      %Command{command | action: action}
     else
       # return error
-      Oc2.Command.return_error("bad action")
+      Command.return_error("bad action")
     end
   end
 
-  defp get_target(%Oc2.Command{error?: true} = command) do
+  defp get_target(%Command{error?: true} = command) do
     ## upstream error, pass it on
     command
   end
@@ -122,13 +126,13 @@ defmodule Openc2.Oc2.CheckOc2 do
     if good_target?(whole_target) do
       [target] = Map.keys(whole_target)
       target_specifier = whole_target[target]
-      %Oc2.Command{command | target: target, target_specifier: target_specifier}
+      %Command{command | target: target, target_specifier: target_specifier}
     else
-      Oc2.Command.return_error("bad target")
+      Command.return_error("bad target")
     end
   end
 
-  defp check_target(%Oc2.Command{error?: true} = command) do
+  defp check_target(%Command{error?: true} = command) do
     ## upstream error, pass it on
     command
   end
@@ -139,16 +143,16 @@ defmodule Openc2.Oc2.CheckOc2 do
         # valid so continue
         command
       else
-        Oc2.Command.return_error(
+        Command.return_error(
           "invalid action:target  #{inspect(command.cmd)} #{inspect(command.target)}"
         )
       end
     else
-      Oc2.Command.return_error("invalid target #{inspect(command.target)}")
+      Command.return_error("invalid target #{inspect(command.target)}")
     end
   end
 
-  defp check_id(%Oc2.Command{error?: true} = command) do
+  defp check_id(%Command{error?: true} = command) do
     ## upstream error, pass it on
     command
   end
@@ -159,10 +163,10 @@ defmodule Openc2.Oc2.CheckOc2 do
       Logger.debug("command_id #{inspect(command_id)}")
 
       if is_binary(command_id) do
-        %Oc2.Command{command | cmd_id: command_id}
+        %Command{command | cmd_id: command_id}
       else
         # illegal type
-        Oc2.Command.return_error("command_id is not string")
+        Command.return_error("command_id is not string")
       end
     else
       # no command id so continue
@@ -170,7 +174,7 @@ defmodule Openc2.Oc2.CheckOc2 do
     end
   end
 
-  defp check_args(%Oc2.Command{error?: true} = command) do
+  defp check_args(%Command{error?: true} = command) do
     ## upstream error, pass it on
     command
   end
@@ -179,21 +183,21 @@ defmodule Openc2.Oc2.CheckOc2 do
     cond do
       not Map.has_key?(command.cmd, "args") ->
         # no args but need to default response_requested
-        %Oc2.Command{command | response: "complete"}
+        %Command{command | response: "complete"}
 
       not has_only_one_key?(command.cmd["args"]) ->
         # implementation only supports one arg at moment
-        Oc2.Command.return_error("not one arg: #{inspect(command.cmd["args"])}")
+        Command.return_error("not one arg: #{inspect(command.cmd["args"])}")
 
       not Map.has_key?(command.cmd["args"], "response_requested") ->
         # only handling the response_requested arg for now
-        Oc2.Command.return_error("unknown arg #{inspect(command.cmd["args"])}")
+        Command.return_error("unknown arg #{inspect(command.cmd["args"])}")
 
       command.cmd["args"]["response_requested"] in @response ->
-        %Oc2.Command{command | response: command.cmd["args"]["response_requested"]}
+        %Command{command | response: command.cmd["args"]["response_requested"]}
 
       true ->
-        Oc2.Command.return_error(
+        Command.return_error(
           "not handling response_requested = #{inspect(command.cmd["args"]["response_requested"])} "
         )
     end

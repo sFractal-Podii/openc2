@@ -1,0 +1,4 @@
+{"action": "set",
+ "target": {"led": "red"},
+ "args": {"response_requested": "complete"}
+}
