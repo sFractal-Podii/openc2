@@ -38,11 +38,11 @@ defmodule Openc2.Oc2.DoQuery do
   end
 
   def do_cmd(%Command{action: "query", target: "sbom"} = command) do
-    Oc2.DoQuerySbom.return_sbom(command)
+    Openc2.Oc2.DoQuerySbom.return_sbom(command)
   end
 
   def do_cmd(%Command{action: "query", target: "features"} = command) do
-    Oc2.DoQueryFeatures.return_features(command)
+    Openc2.Oc2.DoQueryFeatures.return_features(command)
   end
 
   def do_cmd(command) do

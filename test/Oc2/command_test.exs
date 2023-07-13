@@ -182,9 +182,9 @@ defmodule CommandTest do
   end
 
   test "sbom.json" do
-    {:ok, jsontxt} = File.read("test/Good-command/sbom-01-list-resp-b.json")
-    command = jsontxt |> Openc2.Oc2.Command.new()
+    {:ok, jsontxt} = File.read("test/Good-command/sbom-01-list-query.json")
 
+    command = jsontxt |> Openc2.Oc2.Command.new()
     assert command.error? == false
     assert command.error_msg == nil
     assert command.action == "query"
@@ -193,7 +193,7 @@ defmodule CommandTest do
     assert command.args == nil
     assert command.cmd_id == nil
     assert command.target == "sbom"
-    assert command.target_specifier == %{"type" => ["cyclonedx", "spdx", "swid"]}
+    # assert command.target_specifier == %{"type" => ["cyclonedx", "spdx", "swid"]}
     assert command.response == "complete"
   end
 

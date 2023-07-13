@@ -1,11 +1,13 @@
 defmodule DoQueryTest do
   use ExUnit.Case
-  doctest Oc2.DoQuery
+  alias Openc2.Oc2.DoQuery
+  alias Openc2.Oc2.Command
+  doctest Openc2.Oc2.DoQuery
 
   test "check_cmd_upsteam" do
     command =
-      %Oc2.Command{error?: true, error_msg: "error_msg"}
-      |> Oc2.DoQuery.do_cmd()
+      %Command{error?: true, error_msg: "error_msg"}
+      |> DoQuery.do_cmd()
 
     assert command.error? == true
     assert command.error_msg == "error_msg"
@@ -13,8 +15,8 @@ defmodule DoQueryTest do
 
   test "wrong action" do
     command =
-      %Oc2.Command{error?: false, action: "set"}
-      |> Oc2.DoQuery.do_cmd()
+      %Command{error?: false, action: "set"}
+      |> DoQuery.do_cmd()
 
     assert command.error? == true
     assert command.error_msg == "wrong action in command"
@@ -22,13 +24,13 @@ defmodule DoQueryTest do
 
   test "hello world" do
     command =
-      %Oc2.Command{
+      %Command{
         error?: false,
         action: "query",
         target: "x-sfractal-blinky:hello_world",
         target_specifier: "Hello"
       }
-      |> Oc2.DoQuery.do_cmd()
+      |> DoQuery.do_cmd()
 
     assert command.error? == false
     assert command.response == "Hello World"
@@ -36,13 +38,13 @@ defmodule DoQueryTest do
 
   test "bad hello world" do
     command =
-      %Oc2.Command{
+      %Command{
         error?: false,
         action: "query",
         target: "x-sfractal-blinky:hello_world",
         target_specifier: "hello"
       }
-      |> Oc2.DoQuery.do_cmd()
+      |> DoQuery.do_cmd()
 
     assert command.error? == true
     assert command.error_msg == "Hello World incorrect specifier"
@@ -50,13 +52,13 @@ defmodule DoQueryTest do
 
   test "invalid action/target" do
     command =
-      %Oc2.Command{
+      %Command{
         error?: false,
         action: "query",
         target: "hello_world",
         target_specifier: "hello"
       }
-      |> Oc2.DoQuery.do_cmd()
+      |> DoQuery.do_cmd()
 
     assert command.error? == true
     assert command.error_msg == "invalid action/target or target/specifier pair"
@@ -64,13 +66,13 @@ defmodule DoQueryTest do
 
   test "good_sbom" do
     command =
-      %Oc2.Command{
+      %Command{
         error?: false,
         action: "query",
         target: "sbom",
         target_specifier: %{type: ["cyclonedx", "spdx", "swid"]}
       }
-      |> Oc2.DoQuery.do_cmd()
+      |> DoQuery.do_cmd()
 
     assert command.error? == false
     assert command.response.status == 200
@@ -81,13 +83,13 @@ defmodule DoQueryTest do
 
   test "sbom_swid" do
     command =
-      %Oc2.Command{
+      %Command{
         error?: false,
         action: "query",
         target: "sbom",
         target_specifier: %{type: ["swid"]}
       }
-      |> Oc2.DoQuery.do_cmd()
+      |> DoQuery.do_cmd()
 
     assert command.error? == true
     assert command.error_msg == "invalid target specifier"
@@ -95,13 +97,13 @@ defmodule DoQueryTest do
 
   test "sbom_not_list" do
     command =
-      %Oc2.Command{
+      %Command{
         error?: false,
         action: "query",
         target: "sbom",
         target_specifier: %{type: "cyclonedx"}
       }
-      |> Oc2.DoQuery.do_cmd()
+      |> DoQuery.do_cmd()
 
     assert command.error? == true
     assert command.error_msg == "invalid target specifier"
@@ -109,13 +111,13 @@ defmodule DoQueryTest do
 
   test "sbom_not_type" do
     command =
-      %Oc2.Command{
+      %Command{
         error?: false,
         action: "query",
         target: "sbom",
         target_specifier: %{nottype: "cyclonedx"}
       }
-      |> Oc2.DoQuery.do_cmd()
+      |> DoQuery.do_cmd()
 
     assert command.error? == true
     assert command.error_msg == "invalid target specifier"
@@ -123,8 +125,8 @@ defmodule DoQueryTest do
 
   test "sbom_not_map" do
     command =
-      %Oc2.Command{error?: false, action: "query", target: "sbom", target_specifier: "cyclonedx"}
-      |> Oc2.DoQuery.do_cmd()
+      %Command{error?: false, action: "query", target: "sbom", target_specifier: "cyclonedx"}
+      |> DoQuery.do_cmd()
 
     assert command.error? == true
     assert command.error_msg == "invalid target specifier"
@@ -132,13 +134,13 @@ defmodule DoQueryTest do
 
   test "feature not list" do
     command =
-      %Oc2.Command{
+      %Command{
         error?: false,
         action: "query",
         target: "features",
         target_specifier: "version"
       }
-      |> Oc2.DoQuery.do_cmd()
+      |> DoQuery.do_cmd()
 
     assert command.error? == true
     assert command.error_msg == "invalid target specifier"
@@ -146,13 +148,13 @@ defmodule DoQueryTest do
 
   test "invalid feature" do
     command =
-      %Oc2.Command{
+      %Command{
         error?: false,
         action: "query",
         target: "features",
         target_specifier: ["nonfeature"]
       }
-      |> Oc2.DoQuery.do_cmd()
+      |> DoQuery.do_cmd()
 
     assert command.error? == true
     assert command.error_msg == "invalid features"
@@ -160,8 +162,8 @@ defmodule DoQueryTest do
 
   test "empty feature" do
     command =
-      %Oc2.Command{error?: false, action: "query", target: "features", target_specifier: []}
-      |> Oc2.DoQuery.do_cmd()
+      %Command{error?: false, action: "query", target: "features", target_specifier: []}
+      |> DoQuery.do_cmd()
 
     assert command.error? == false
     assert command.response.status == 200
@@ -169,46 +171,46 @@ defmodule DoQueryTest do
 
   test "versions" do
     command =
-      %Oc2.Command{
+      %Command{
         error?: false,
         action: "query",
         target: "features",
         target_specifier: ["versions"]
       }
-      |> Oc2.DoQuery.do_cmd()
+      |> DoQuery.do_cmd()
 
     assert command.error? == false
     assert command.response.status == 200
-    assert command.response.results.versions == ["0.5.2"]
+    assert command.response.results.versions == ["0.9.5"]
   end
 
   test "pairs" do
     command =
-      %Oc2.Command{
+      %Command{
         error?: false,
         action: "query",
         target: "features",
         target_specifier: ["pairs"]
       }
-      |> Oc2.DoQuery.do_cmd()
+      |> DoQuery.do_cmd()
 
     assert command.error? == false
     assert command.response.status == 200
     assert Enum.member?(command.response.results.pairs.query, :features)
     assert Enum.member?(command.response.results.pairs.query, :sbom)
-    assert Enum.member?(command.response.results.pairs.query, :"hello_world")
-    assert Enum.member?(command.response.results.pairs.set, :"led")
+    assert Enum.member?(command.response.results.pairs.query, :hello_world)
+    assert Enum.member?(command.response.results.pairs.set, :led)
   end
 
   test "rate_limit" do
     command =
-      %Oc2.Command{
+      %Command{
         error?: false,
         action: "query",
         target: "features",
         target_specifier: ["rate_limit"]
       }
-      |> Oc2.DoQuery.do_cmd()
+      |> DoQuery.do_cmd()
 
     assert command.error? == false
     assert command.response.status == 200
@@ -217,28 +219,28 @@ defmodule DoQueryTest do
 
   test "profiles" do
     command =
-      %Oc2.Command{
+      %Command{
         error?: false,
         action: "query",
         target: "features",
         target_specifier: ["profiles"]
       }
-      |> Oc2.DoQuery.do_cmd()
+      |> DoQuery.do_cmd()
 
     assert command.error? == false
     assert command.response.status == 200
-    assert command.response.results.profiles == "Duncan needs to do profiles output"
+    assert command.response.results.profiles == ["sbom", "blinky", "slpf"]
   end
 
   test "multifeature" do
     command =
-      %Oc2.Command{
+      %Command{
         error?: false,
         action: "query",
         target: "features",
         target_specifier: ["rate_limit", "profiles", "pairs"]
       }
-      |> Oc2.DoQuery.do_cmd()
+      |> DoQuery.do_cmd()
 
     assert command.error? == false
     assert command.response.status == 200
