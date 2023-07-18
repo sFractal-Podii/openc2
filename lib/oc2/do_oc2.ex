@@ -19,11 +19,11 @@ defmodule Openc2.Oc2.DoOc2 do
   end
 
   def do_cmd(%Command{action: "set"} = command) do
-    Oc2.DoSet.do_cmd(command)
+    Openc2.Oc2.DoSet.do_cmd(command)
   end
 
   def do_cmd(%Command{action: "query"} = command) do
-    Oc2.DoQuery.do_cmd(command)
+    Openc2.Oc2.DoQuery.do_cmd(command)
   end
 
   def do_cmd(command) do
