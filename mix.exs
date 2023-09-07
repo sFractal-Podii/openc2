@@ -5,7 +5,7 @@ defmodule Openc2.MixProject do
     [
       app: :openc2,
       version: "0.1.1",
-      elixir: "~> 1.12",
+      elixir: "~> 1.15.4",
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
@@ -21,7 +21,7 @@ defmodule Openc2.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:jason, "~> 1.2"}
+      {:jason, "~> 1.4"}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
     ]
