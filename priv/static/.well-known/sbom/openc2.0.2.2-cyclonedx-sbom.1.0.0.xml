@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<bom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" serialNumber="f49091ae-ae08-41cd-8417-0d87bd8a183c" xmlns="http://cyclonedx.org/schema/bom/1.3">
+  <metadata>
+    <timestamp>2023-09-22T06:36:08.044366Z</timestamp>
+    <tools>
+      <tool>
+        <name>SBoM Mix task for Elixir</name>
+      </tool>
+    </tools>
+    <component type="library">
+      <name>NO_NAME_PACKAGE</name>
+      <version />
+      <description>Description goes here</description>
+      <licenses>
+        <license>
+          <id>MIT</id>
+        </license>
+      </licenses>
+    </component>
+  </metadata>
+  <components>
+    <component type="library">
+      <name>jason</name>
+      <version>1.4.0</version>
+      <description>A blazing fast JSON parser and generator in pure Elixir.</description>
+      <hashes>
+        <hash alg="SHA-256">e855647bc964a44e2f67df589ccf49105ae039d4179db7f6271dfd3843dc27e6</hash>
+      </hashes>
+      <licenses>
+        <license>
+          <id>Apache-2.0</id>
+        </license>
+      </licenses>
+      <purl>pkg:hex/jason@1.4.0</purl>
+    </component>
+  </components>
+</bom>

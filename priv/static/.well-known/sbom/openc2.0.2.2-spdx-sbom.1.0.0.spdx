@@ -1,0 +1,38 @@
+{
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "spdxVersion": "SPDX-2.2",
+  "creationInfo": {
+    "comment": "This SPDX document has been converted from CycloneDX format.",
+    "created": "2023-09-22T06:36:08.044366Z",
+    "creators": [
+      "Tool: SBoM Mix task for Elixir-"
+    ]
+  },
+  "name": "NO_NAME_PACKAGE-",
+  "dataLicense": "CC0-1.0",
+  "documentNamespace": "http://spdx.org/spdxdocs/NO_NAME_PACKAGE--f49091ae-ae08-41cd-8417-0d87bd8a183c",
+  "packages": [
+    {
+      "SPDXID": "SPDXRef-Package-1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e855647bc964a44e2f67df589ccf49105ae039d4179db7f6271dfd3843dc27e6"
+        }
+      ],
+      "copyrightText": "NOASSERTION",
+      "description": "A blazing fast JSON parser and generator in pure Elixir.",
+      "downloadLocation": "NOASSERTION",
+      "homepage": "NOASSERTION",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "Apache-2.0",
+      "licenseInfoFromFiles": [
+        "NOASSERTION"
+      ],
+      "name": "jason",
+      "originator": "NOASSERTION",
+      "supplier": "NOASSERTION",
+      "versionInfo": "1.4.0"
+    }
+  ]
+}
