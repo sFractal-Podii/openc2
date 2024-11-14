@@ -5,7 +5,7 @@ defmodule Openc2.MixProject do
     [
       app: :openc2,
       version: "0.3.2",
-      elixir: "~> 1.15.4",
+      elixir: "~> 1.17.0",
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]

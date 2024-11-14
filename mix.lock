@@ -1,5 +1,5 @@
 %{
-  "castore": {:hex, :castore, "1.0.3", "7130ba6d24c8424014194676d608cb989f62ef8039efd50ff4b3f33286d06db8", [:mix], [], "hexpm", "680ab01ef5d15b161ed6a95449fac5c6b8f60055677a8e79acf01b27baa4390b"},
-  "jason": {:hex, :jason, "1.4.0", "e855647bc964a44e2f67df589ccf49105ae039d4179db7f6271dfd3843dc27e6", [:mix], [{:decimal, "~> 1.0 or ~> 2.0", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm", "79a3791085b2a0f743ca04cec0f7be26443738779d09302e01318f97bdb82121"},
+  "castore": {:hex, :castore, "1.0.10", "43bbeeac820f16c89f79721af1b3e092399b3a1ecc8df1a472738fd853574911", [:mix], [], "hexpm", "1b0b7ea14d889d9ea21202c43a4fa015eb913021cb535e8ed91946f4b77a8848"},
+  "jason": {:hex, :jason, "1.4.4", "b9226785a9aa77b6857ca22832cffa5d5011a667207eb2a0ad56adb5db443b8a", [:mix], [{:decimal, "~> 1.0 or ~> 2.0", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm", "c5eb0cab91f094599f94d55bc63409236a8ec69a21a67814529e8d5f6cc90b3b"},
   "sbom": {:git, "https://github.com/sigu/sbom.git", "ce3809174ca0aa7bb8b035722857860e81fe453d", [branch: "auto-install-bom"]},
 }
